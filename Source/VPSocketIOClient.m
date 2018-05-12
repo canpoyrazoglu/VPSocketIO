@@ -299,7 +299,9 @@ NSString *const kSocketEventStatusChange       = @"statusChange";
 {
     NSMutableArray *array = [NSMutableArray arrayWithObject:event];
     [array addObjectsFromArray:items];
-    return [self createOnAck:array];
+    VPSocketOnAckCallback *callback = [self createOnAck:array];
+    [self emitData:array ack:currentAck];
+    return callback;
 }
 
 -(void)emitData:(NSArray*)data ack:(int) ack
@@ -324,7 +326,7 @@ NSString *const kSocketEventStatusChange       = @"statusChange";
         
         VPSocketPacket *packet = [VPSocketPacket packetFromEmit:items id:ack nsp:_nsp ack:YES];
         NSString *str = packet.packetString;
-        
+        NSLog(@"emit %@", str);
         [DefaultSocketLogger.logger log:[NSString stringWithFormat:@"Emitting Ack: %@", str] type:self.logType];
         
         [_engine send:str withData:packet.binary];

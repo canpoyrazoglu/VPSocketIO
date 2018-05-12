@@ -25,4 +25,8 @@
     return _ack & 0x0F;
 }
 
+-(void)removeCallback{
+    _callback = nil;
+}
+
 @end

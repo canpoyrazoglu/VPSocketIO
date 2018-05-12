@@ -5,6 +5,8 @@ It's based on a official Swift library from here: [SocketIO-Client-Swift](https:
 
 It uses Jetfire [Jetfire](https://github.com/acmacalister/jetfire)
 
+###This fork fixes an issue with emitting events with ACK not working properly.
+
 ## Objective-C Example
 ```objective-c
 #import <SocketIO-iOS/SocketIO-iOS.h>;
@@ -36,7 +38,19 @@ github "vascome/vpsocketio" ~> 1.0.5 # Or latest version
 Run `carthage update --platform ios,macosx`.
 
 ### CocoaPods 1.0.0 or later
+
 Create `Podfile` and add `pod 'VPSocketIO'` (pod files are case sensetive):
+
+##For this fork:
+
+```ruby
+
+target 'MyApp' do
+    pod 'VPSocketIO', :git => 'git://github.com/canpoyrazoglu/VPSocketIO.git'
+end
+```
+
+##For the original version:
 
 ```ruby
 

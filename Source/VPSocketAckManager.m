@@ -36,41 +36,42 @@
 {
     VPSocketAck *socketAck = [self removeAckWithId:ack];
     dispatch_async(queue, ^
-    {
-        @autoreleasepool
-        {
-            if(socketAck && socketAck.callback) {
-                socketAck.callback(items);
-            }
-        }
-    });
+                   {
+                       @autoreleasepool
+                       {
+                           if(socketAck && socketAck.callback) {
+                               socketAck.callback(items);
+                               [socketAck removeCallback];
+                           }
+                       }
+                   });
     
 }
 -(void)timeoutAck:(int)ack onQueue:(dispatch_queue_t)queue
 {
     VPSocketAck *socketAck = [self removeAckWithId:ack];
-    dispatch_async(queue, ^
-    {
-        @autoreleasepool
-        {
-            if(socketAck && socketAck.callback) {
-                socketAck.callback(@[@"NO ACK"]);
-            }
-        }
-    });
+    if(socketAck.callback){
+        dispatch_async(queue, ^
+                       {
+                           @autoreleasepool
+                           {
+                               socketAck.callback(@[@"NO ACK"]);
+                           }
+                       });
+    }
 }
 
 -(VPSocketAck*)removeAckWithId:(int)ack {
     
-    dispatch_semaphore_wait(ackSemaphore,DISPATCH_TIME_FOREVER);
     VPSocketAck *socketAck = nil;
     for (VPSocketAck *vpack in acks) {
         if(vpack.ack == ack) {
             socketAck = vpack;
         }
     }
-    [acks removeObject:socketAck];
-    dispatch_semaphore_signal(ackSemaphore);
+    if(socketAck){
+        [acks removeObject:socketAck];
+    }
     return socketAck;
 }
 

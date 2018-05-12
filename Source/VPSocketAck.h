@@ -16,5 +16,7 @@
 
 -(instancetype)initWithAck:(int)ack andCallBack:(VPScoketAckArrayCallback)callback;
 
+-(void)removeCallback;
+
 @end
 
